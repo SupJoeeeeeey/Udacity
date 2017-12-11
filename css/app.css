@@ -196,7 +196,7 @@ h1 {
 /* Styles for Ending Page */
 
 .ending-page{
-    /* visibility: hidden; */
+    visibility: hidden;
     display: flex;
     justify-content: center;
     align-items: center;

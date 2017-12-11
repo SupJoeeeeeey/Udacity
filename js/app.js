@@ -60,6 +60,7 @@ function render_cards(array){
 }
 
 function click_handler(obj){
+	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";
 	current++;
 	document.getElementsByClassName("moves")[0].innerHTML = ++times;
 	obj.setAttribute('class','card open show');
@@ -78,6 +79,9 @@ function judge2(idx){
 		clicked[idx].setAttribute('onclick','');
 		clicked[idx-1].setAttribute('class','card match');
 		clicked[idx-1].setAttribute('onclick','');
+		if(document.getElementsByClassName("card match").length == 16){
+			document.getElementsByClassName("ending-page")[0].style.visbility = "visible";
+		}
 	}
 	else{
 		setTimeout(function(){NoMatch2(idx);},700);
