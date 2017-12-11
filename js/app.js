@@ -60,7 +60,7 @@ function render_cards(array){
 }
 
 function click_handler(obj){
-	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";
+	setTimeout(function(){EndPage();},700);
 	current++;
 	document.getElementsByClassName("moves")[0].innerHTML = ++times;
 	obj.setAttribute('class','card open show');
@@ -80,7 +80,7 @@ function judge2(idx){
 		clicked[idx-1].setAttribute('class','card match');
 		clicked[idx-1].setAttribute('onclick','');
 		if(document.getElementsByClassName("card match").length == 16){
-			document.getElementsByClassName("ending-page")[0].style.visbility = "visible";
+			setTimeout(function(){EndPage();},700);
 		}
 	}
 	else{
@@ -97,6 +97,10 @@ function NoMatch2(idx){
 	clicked[idx].setAttribute('onclick','click_handler(this);');
 }
 
+function EndPage(){
+	document.getElementsByClassName("container")[0].style.visibility = "hidden";
+	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
