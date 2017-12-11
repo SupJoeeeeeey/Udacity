@@ -60,7 +60,7 @@ function render_cards(array){
 }
 
 function click_handler(obj){
-	setTimeout(function(){EndPage();},700);
+	setTimeout(function(){EndPage();},1000);
 	current++;
 	document.getElementsByClassName("moves")[0].innerHTML = ++times;
 	obj.setAttribute('class','card open show');
@@ -98,8 +98,9 @@ function NoMatch2(idx){
 }
 
 function EndPage(){
+	setTimeout(function(){	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";},700);
+	document.getElementsByClassName("deck")[0].style.visibility = "hidden";
 	document.getElementsByClassName("container")[0].style.visibility = "hidden";
-	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";
 }
 
 /*
