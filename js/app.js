@@ -16,15 +16,14 @@ var card_list = ["fa fa-diamond","fa fa-diamond",
 function init(){
 	var array = shuffle(card_list);
 	times = 0;
-	document.getElementsByClassName("moves")[0].innerHTML = times;
+	$("#moves").text(times);
 	current = 0;	
 	clicked = new Array();
 	render_cards(array);
 }
 
 function moves(){
-	var str = times;
-	document.getElementsByClassName("moves")[0].innerHTML = str;
+	$("#moves").text(times);
 }
 /*
  * Display the cards on the page
