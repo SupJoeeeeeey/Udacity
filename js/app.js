@@ -14,6 +14,8 @@ var card_list = ["fa fa-diamond","fa fa-diamond",
 				"fa fa-bomb","fa fa-bomb"];
 
 function init(){
+	$(".ending-page").hide();
+	$(".container").show();
 	var array = shuffle(card_list);
 	times = 0;
 	document.getElementsByClassName("moves")[0].innerHTML = times;
@@ -60,9 +62,8 @@ function render_cards(array){
 }
 
 function click_handler(obj){
-	setTimeout(function(){EndPage();},1000);
 	current++;
-	document.getElementsByClassName("moves")[0].innerHTML = ++times;
+	$(".moves").text(++times);
 	obj.setAttribute('class','card open show');
 	obj.setAttribute('onclick','');
 	obj.setAttribute('class','card open show');
@@ -98,9 +99,11 @@ function NoMatch2(idx){
 }
 
 function EndPage(){
-	setTimeout(function(){	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";},700);
-	document.getElementsByClassName("deck")[0].style.visibility = "hidden";
-	document.getElementsByClassName("container")[0].style.visibility = "hidden";
+	//setTimeout(function(){	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";},700);
+	$(".container").fadeOut(500);
+	$(".ending-page").show(500);
+	//document.getElementsByClassName("deck")[0].style.visibility = "hidden";
+	//document.getElementsByClassName("container")[0].style.visibility = "hidden";
 }
 
 /*

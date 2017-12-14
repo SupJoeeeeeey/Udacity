@@ -192,19 +192,28 @@ h1 {
 /* Styles for Ending Page */
 
 .ending-page{
-    visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position:absolute;
-    height:680px;
-    width:680px;
-    margin: 0 0 3em;
-    top:0;
-    width:100%;
+    display: block;
+    text-align:center;
+    margin: 0 auto;
+    width:90%;
     height:100%;
+    line-height: 100%;
     z-index:1;
     padding: 32px;
+}
+
+.loader{
+    margin:50px auto 20px auto;
+    text-align: center;
+}
+.congratulation{
+    margin: 20px auto;
+    display:block;
+}
+
+button{
+    margin:0 auto;
+    display: block;
 }
 
 
