@@ -2,7 +2,9 @@
  * Create a list that holds all of your cards
  */
 var times = 0;
-var current = 0;
+var seconds = 0;
+var stars = 2;
+var timeCounter;
 var clicked = new Array();
 var card_list = ["fa fa-diamond","fa fa-diamond",
 				"fa fa-paper-plane-o","fa fa-paper-plane-o",
@@ -13,20 +15,22 @@ var card_list = ["fa fa-diamond","fa fa-diamond",
 				"fa fa-bicycle","fa fa-bicycle",
 				"fa fa-bomb","fa fa-bomb"];
 
+
 function init(){
+	stars = 2;
+	$(".stars li").show();
 	$(".ending-page").hide();
 	$(".container").show();
-	var array = shuffle(card_list);
+	card_list = shuffle(card_list);
 	times = 0;
-	$("#moves").text(times);
-	current = 0;	
-	clicked = new Array();
-	render_cards(array);
+	$("#moves").text(times+" Moves");
+	seconds = 0;
+	$("#timeCounter").text(seconds+" Seconds");
+	clearInterval(timeCounter);
+	clicked = [];
+	render_cards(card_list);
 }
 
-function moves(){
-	$("#moves").text(times);
-}
 /*
  * Display the cards on the page
  *   - shuffle the list of cards using the provided "shuffle" method below
@@ -51,58 +55,60 @@ function shuffle(array) {
 
 function render_cards(array){
 	var array = shuffle(array);
-	var str = "";
-	for(var i = 0; i < array.length;i++){
-		str+="<li class = 'card' onclick = 'click_handler(this);' >";
-		str+="<i class = '"+array[i]+"'></i>"
-		str+="</li>"
-	}
-	document.getElementsByClassName("deck")[0].innerHTML = str;
-}
-
-function click_handler(obj){
-	current++;
-	$(".moves").text(++times);
-	obj.setAttribute('class','card open show');
-	obj.setAttribute('onclick','');
-	obj.setAttribute('class','card open show');
-	var idx = clicked.push(obj);
-	if(current%2==0){
-		setTimeout(function(){judge2(idx-1);},700)
-	}
+	$(".card").each(function(idx){
+		$(this).attr("class","card");
+		$(this).children().attr("class",array[idx]);
+	});
 }
 
 
-function judge2(idx){
-	if(clicked[idx].getElementsByTagName('i')[0].className==clicked[idx-1].getElementsByTagName('i')[0].className){
-		clicked[idx].setAttribute('class','card match');
-		clicked[idx].setAttribute('onclick','');
-		clicked[idx-1].setAttribute('class','card match');
-		clicked[idx-1].setAttribute('onclick','');
-		if(document.getElementsByClassName("card match").length == 16){
+$(".card").click(function() {
+	times+=1;
+	$("#moves").text(times+" Moves");
+	if(times == 1){
+		timeCounter = setInterval(function(){
+			seconds++;
+			$("#timeCounter").text(seconds + " Seconds");
+			if(seconds == 5 || seconds == 20){				
+				$(".stars").children("li:nth-child("+stars+")").hide();
+				stars--;
+			}
+		},1000);
+	}
+	if($(this).attr("class")!="card"){
+		return;
+	}
+	if(clicked.length == 2){
+		return;
+	}
+	$(this).addClass('open show');
+	var idx = clicked.push(this);
+	if(clicked.length == 2){
+		judge();
+	}
+});
+
+function judge(){
+	if($(clicked[0]).children().attr("class") == $(clicked[1]).children().attr("class")){
+		$(".open.show").attr("class","card match");
+		clicked = [];
+		if($(".card.match").length == 16){
 			setTimeout(function(){EndPage();},700);
 		}
 	}
 	else{
-		setTimeout(function(){NoMatch2(idx);},700);
-		clicked[idx].setAttribute('class','card notmatch');
-		clicked[idx-1].setAttribute('class','card notmatch');
+		setTimeout(function(){
+			$(".card.notmatch").attr("class","card");
+		},700);
+		$(".open.show").attr("class","card notmatch");
+		clicked=[];
 	}
 }
 
-function NoMatch2(idx){
-	clicked[idx].setAttribute('class','card');
-	clicked[idx-1].setAttribute('class','card');
-	clicked[idx-1].setAttribute('onclick','click_handler(this);');
-	clicked[idx].setAttribute('onclick','click_handler(this);');
-}
-
 function EndPage(){
-	//setTimeout(function(){	document.getElementsByClassName("ending-page")[0].style.visibility = "visible";},700);
 	$(".container").fadeOut(500);
+	$(".congratulation").append("<p>You finished the game in "+ seconds + " seconds!</p>");
 	$(".ending-page").show(500);
-	//document.getElementsByClassName("deck")[0].style.visibility = "hidden";
-	//document.getElementsByClassName("container")[0].style.visibility = "hidden";
 }
 
 /*

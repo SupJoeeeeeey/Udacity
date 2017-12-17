@@ -33,6 +33,7 @@ h1 {
     font-weight: 300;
 }
 
+
 /*
  * Styles for the deck of cards
  */
@@ -168,7 +169,7 @@ h1 {
 
 .score-panel {
     text-align: left;
-    width: 345px;
+    width: 500px;
     margin-bottom: 10px;
 }
 
@@ -182,6 +183,11 @@ h1 {
 .score-panel .stars li {
     list-style: none;
     display: inline-block;
+}
+
+#timeCounter{
+    display:inline-block;
+    margin-left:120px;
 }
 
 .score-panel .restart {
