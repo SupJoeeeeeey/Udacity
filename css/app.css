@@ -187,7 +187,6 @@ h1 {
 }
 
 .score-panel .stars2 {
-    z-index:-1;
     margin: 0;
     padding: 0;
     display: inline-block;
@@ -199,16 +198,19 @@ h1 {
 }
 
 #moves {
-    margin:0 10px 0 5px;
-    position:absolute;
+    /* margin:0 10px 0 5px; */
+    position: absolute;
     list-style: none;
     display: inline-block;
 }
 
 #timeCounter{
-    position:relative;
+    overflow:auto;
+    width:500px;
+    z-index:1;
+    position:absolute;
     display:inline-block;
-    margin-left:200px;
+    text-align:center;
 }
 
 .score-panel .restart {
