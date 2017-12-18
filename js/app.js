@@ -17,9 +17,9 @@ var card_list = ["fa fa-diamond","fa fa-diamond",
 
 
 function init(){
-	stars = 2;
+	stars = 3;
 	$(".stars li").show();
-	$(".stars2 li").hide();
+	// $(".stars2 li").hide();
 	$(".ending-page").hide();
 	$(".container").show();
 	card_list = shuffle(card_list);
@@ -72,7 +72,7 @@ $(".card").click(function() {
 			$("#timeCounter").text(seconds + " Seconds");
 			if(seconds == 5 || seconds == 20){				
 				$(".stars").children("li:nth-child("+stars+")").hide();
-				$(".stars2").children("li:nth-child("+stars+")").show();
+				// $(".stars2").children("li:nth-child("+stars+")").show();
 				stars--;
 			}
 		},1000);
