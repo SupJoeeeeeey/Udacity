@@ -70,9 +70,8 @@ $(".card").click(function() {
 		timeCounter = setInterval(function(){
 			seconds++;
 			$("#timeCounter").text(seconds + " Seconds");
-			if(seconds == 5 || seconds == 20){				
+			if(seconds == 12 || seconds == 24){				
 				$(".stars").children("li:nth-child("+stars+")").hide();
-				// $(".stars2").children("li:nth-child("+stars+")").show();
 				stars--;
 			}
 		},1000);
