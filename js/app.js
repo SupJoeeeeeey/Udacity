@@ -113,6 +113,7 @@ function judge(){
 }
 
 function EndPage(){
+	clearInterval(timeCounter);
 	swal({
 			title: 'Congradulations!',
 			html: "<span>"+'<i class="fa fa-star"></i>'.repeat(stars)+'<i class="fa fa-star-o"></i>'.repeat(3-stars)+"</span><br>"+"You finished the game in " + seconds +" seconds!",
