@@ -175,7 +175,9 @@ h1 {
     display: inline-block;
     margin: 0 5px 0 0;
 }
-
+.score-panel ul{
+    width:12%;
+}
 .score-panel .stars li {
     list-style: none;
     display: inline-block;
@@ -194,8 +196,7 @@ h1 {
 }
 
 #moves {
-    position: absolute;
-    left:15%;
+    position: relative;
 }
 
 #timeCounter{
