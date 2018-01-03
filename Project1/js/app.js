@@ -104,11 +104,11 @@ function judge(){
 		}
 	}
 	else{
+		$(".open.show").attr("class","card notmatch");
+		clicked=[];
 		setTimeout(function(){
 			$(".card.notmatch").attr("class","card");
 		},700);
-		$(".open.show").attr("class","card notmatch");
-		clicked=[];
 	}
 }
 
