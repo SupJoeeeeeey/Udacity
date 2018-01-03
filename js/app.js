@@ -3,7 +3,7 @@
  */
 var times = 0;
 var seconds = 0;
-var stars = 2;
+var stars = 3;
 var timeCounter;
 var clicked = new Array();
 var card_list = ["fa fa-diamond","fa fa-diamond",
@@ -107,7 +107,7 @@ function judge(){
 function EndPage(){
 	swal({
 		title: 'Congradulations!',
-		text: "You finished the game in " + seconds +" seconds!",
+		html: "<span>"+'<i class="fa fa-star"></i>'.repeat(stars)+'<i class="fa fa-star-o"></i>'.repeat(3-stars)+"</span><br>"+"You finished the game in " + seconds +" seconds!",
 		type: "success",
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
