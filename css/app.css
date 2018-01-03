@@ -216,33 +216,3 @@ h1 {
     top:0;
     cursor: pointer;
 }
-
-/* Styles for Ending Page */
-
-.ending-page{
-    display: block;
-    text-align:center;
-    margin: 0 auto;
-    width:90%;
-    height:100%;
-    line-height: 100%;
-    z-index:1;
-    padding: 32px;
-}
-
-.loader{
-    margin:50px auto 20px auto;
-    text-align: center;
-}
-.congratulation{
-    margin: 20px auto;
-    display:block;
-}
-
-button{
-    margin:0 auto;
-    display: block;
-}
-
-
-

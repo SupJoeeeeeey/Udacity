@@ -19,8 +19,6 @@ var card_list = ["fa fa-diamond","fa fa-diamond",
 function init(){
 	stars = 3;
 	$(".stars li").show();
-	// $(".stars2 li").hide();
-	$(".ending-page").hide();
 	$(".container").show();
 	card_list = shuffle(card_list);
 	times = 0;
@@ -107,9 +105,19 @@ function judge(){
 }
 
 function EndPage(){
-	$(".container").fadeOut(500);
-	$(".congratulation").append("<p>You finished the game in "+ seconds + " seconds!</p>");
-	$(".ending-page").show(500);
+	swal({
+		title: 'Congradulations!',
+		text: "You finished the game in " + seconds +" seconds!",
+		type: "success",
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Retry'
+	  }).then((result) => {
+		if (result.value) {
+			init();
+		}
+	  });
 }
 
 /*
