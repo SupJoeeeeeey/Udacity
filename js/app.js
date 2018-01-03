@@ -76,7 +76,7 @@ $(".card").click(function() {
 		timeCounter = setInterval(function(){
 			seconds++;
 			$("#timeCounter").text(seconds + " Seconds");
-			if(seconds == 12 || seconds == 24){				
+			if(seconds == 15 || seconds == 30){				
 				$(".stars").children("li:nth-child("+stars+")").hide();
 				stars--;
 			}
