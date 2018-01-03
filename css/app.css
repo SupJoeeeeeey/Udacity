@@ -195,8 +195,7 @@ h1 {
 
 #moves {
     position: absolute;
-    left:55px;
-    list-style: none;
+    left:15%;
 }
 
 #timeCounter{
