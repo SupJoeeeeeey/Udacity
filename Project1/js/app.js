@@ -123,7 +123,7 @@ function EndPage(){
 	var score2 = '<i class="fa fa-star-o"></i>'.repeat(3-stars);
 	swal({
 			title: 'Congradulations!',
-			html: "<span> ${score}${score2}</span><br>You finished the game in ${seconds} seconds!",
+			html: '<span> ${score}${score2}</span><br>You finished the game in ${seconds} seconds!',
 			type: "success",
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
