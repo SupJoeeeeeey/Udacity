@@ -37,6 +37,9 @@ function shuffle(array) {
     return array;
 }
 
+/*
+ * @discription: reset all the cards and score panel
+ */
 function init(){
 	stars = 3;
 	$(".stars li").show();
@@ -70,8 +73,6 @@ function render_cards(array){
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 $(".card").click(function() {
-	times+=1;
-	$("#moves").text(times+" Moves");
 	if(times == 1){
 		timeCounter = setInterval(function(){
 			seconds++;
@@ -93,6 +94,8 @@ $(".card").click(function() {
 	var idx = clicked.push(this);
 	if(clicked.length == 2){
 		judge();
+		times+=1;
+		$("#moves").text(times+" Moves");
 	}
 });
 
