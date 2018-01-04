@@ -44,7 +44,7 @@ h1 {
     background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
     padding: 32px;
     border-radius: 10px;
-    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, .5);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -63,8 +63,9 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, 0.5);
-    transition: all 0.5s linear;
+    box-shadow: 5px 2px 20px 0 rgba(46, 61, 73, .5);
+    transition: transform .5s ease;
+    transition: font 0;
 }
 
 .deck .card.open {
@@ -79,14 +80,15 @@ h1 {
 }
 
 .deck .card.match {
-    animation: rubberBand 0.5s;
+    animation: rubberBand .5s;
     cursor: default;
     background: #02ccba;
     font-size: 33px;
 }
 
 .deck .card.notmatch{
-    animation: wobble 0.5s;
+    animation: wobble .5s;
+    cursor: default;
     background: #df180a;
     font-size: 33px;
 }

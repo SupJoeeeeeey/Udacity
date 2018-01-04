@@ -88,6 +88,7 @@ $(".card").click(function() {
 	if(clicked.length == 2){
 		return;
 	}
+	
 	$(this).addClass('open show');
 	var idx = clicked.push(this);
 	if(clicked.length == 2){
@@ -104,11 +105,11 @@ function judge(){
 		}
 	}
 	else{
+		$(".open.show").attr("class","card notmatch").text();
+		clicked=[];
 		setTimeout(function(){
 			$(".card.notmatch").attr("class","card");
 		},700);
-		$(".open.show").attr("class","card notmatch");
-		clicked=[];
 	}
 }
 
