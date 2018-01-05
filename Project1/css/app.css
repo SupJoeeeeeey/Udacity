@@ -17,7 +17,12 @@ body {
 }
 
 body {
-    background: #ffffff url('../img/geometry2.png'); /* Background pattern from Subtle Patterns */
+    /* background: #ffffff url('../img/geometry2.png'); Background pattern from Subtle Patterns */
+    background: #141E30;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(-45deg, #35577D, #141E30);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(-45deg, #35577D, #141E30);
     font-family: 'Coda', cursive;
 }
 
@@ -219,7 +224,7 @@ h1 {
 }
 
 /* snow */
-body { background-color:transparent; }
+/* body { background-color:transparent; } */
 #snow{
     background: none;
     pointer-events: none;
