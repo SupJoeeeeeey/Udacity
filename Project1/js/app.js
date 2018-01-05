@@ -73,10 +73,10 @@ function render_cards(array){
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 $(".card").click(function() {
-	if(times == 1){
+	if(seconds == 0){
 		timeCounter = setInterval(function(){
 			seconds++;
-			$("#timeCounter").text(seconds + " Seconds");
+			$("#timeCounter").text("${seconds} Seconds");
 			if(seconds == 15 || seconds == 30){				
 				$(".stars").children("li:nth-child("+stars+")").hide();
 				stars--;
