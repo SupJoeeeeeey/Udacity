@@ -1,6 +1,7 @@
 /*
  * Create a list that holds all of your cards
  */
+var clickedTimes = 0;
 var times = 0;
 var seconds = 0;
 var stars = 3;
@@ -42,14 +43,16 @@ function shuffle(array) {
  */
 function init(){
 	stars = 3;
+	clickedTimes=0;
 	$(".stars li").show();
 	$(".container").show();
 	card_list = shuffle(card_list);
 	times = 0;
 	$("#moves").text(times+" Moves");
+	clearInterval(timeCounter);
 	seconds = 0;
 	$("#timeCounter").text(seconds+" Seconds");
-	clearInterval(timeCounter);
+	timeCounter=null;
 	clicked = [];
 	render_cards(card_list);
 }
@@ -73,10 +76,10 @@ function render_cards(array){
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 $(".card").click(function() {
-	if(seconds == 0){
+	if(clickedTimes == 0){
 		timeCounter = setInterval(function(){
 			seconds++;
-			$("#timeCounter").text("${seconds} Seconds");
+			$("#timeCounter").text(seconds+' Seconds');
 			if(seconds == 15 || seconds == 30){				
 				$(".stars").children("li:nth-child("+stars+")").hide();
 				stars--;
@@ -90,7 +93,7 @@ $(".card").click(function() {
 	if(clicked.length == 2){
 		return;
 	}
-	
+	clickedTimes++;
 	$(this).addClass('open show');
 	var idx = clicked.push(this);
 	if(clicked.length == 2){
