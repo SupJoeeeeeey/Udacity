@@ -32,16 +32,58 @@ class Enemy{
 // 现在实现你自己的玩家类
 // 这个类需要一个 update() 函数， render() 函数和一个 handleInput()函数
 class Player extends Enemy{
-    constructor(x=100,y=100, sprite='images/char-boy.png'){
+    constructor(x=101,y=319, sprite='images/char-boy.png'){
         super(x,y,sprite);
     }
 
     update(dt){
 
     }
-
     render(){
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+        this.collisionHandler();
+    }
+
+    handleInput(e){
+        switch(e){
+            case 'left':
+                if(this.x>0){
+                    this.x-=101;
+                }
+                break;
+            case 'right':
+                if(this.x<404){
+                    this.x+=101;
+                }
+                break;
+            case 'up':
+                if(this.y>-13){
+                    this.y-=83;
+                }
+                break;
+            case 'down':
+                if(this.y<402){
+                    this.y+=83;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    collisionHandler(){
+        allEnemies.forEach(function(enemy) {
+            if(enemy.x-40 < player.x && enemy.x+101>player.x){
+                if(enemy.y+10 == player.y){
+                    player.reset();
+                }
+            }
+        });
+    }
+
+    reset(){
+        this.x=101;
+        this.y=319;
     }
 }
 
@@ -51,9 +93,10 @@ class Player extends Enemy{
 let allEnemies = [],
     player;
 function initEnemies(){
-    for(let i = 0; i < 5; i++){
-        allEnemies.push(new Enemy(i*101,i*83));
+    for(let i = 0; i < 3; i++){
+        allEnemies.push(new Enemy(0,(i*83)+60));
     }
+    allEnemies.push(new Enemy(0,60));
     player = new Player();
 }
 
