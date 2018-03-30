@@ -5,7 +5,7 @@
 </p>
 
 #游戏角色#
-![character](/images/char-boy.png)
+![character](./images/char-boy.png)
 
 
 #游戏规则#
