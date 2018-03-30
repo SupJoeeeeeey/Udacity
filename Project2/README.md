@@ -1,5 +1,5 @@
 <h1>游戏地址</h1>
-<a href="https://github.com/SupJoeeeeeey/Udacity/tree/master/Project2/index.html">经典街机游戏</a>
+<a href="https://supjoeeeeeey.github.io/Udacity/Project2/index.html">经典街机游戏</a>
 <br>
 <h1>游戏开始</h1>
 <p>
