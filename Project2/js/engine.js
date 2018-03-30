@@ -52,7 +52,6 @@ var Engine = (function(global) {
      * 做一次就够了
      */
     function init() {
-        reset();
         lastTime = Date.now();
         main();
     }
@@ -75,7 +74,7 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+        if(player!=null) player.update();
     }
 
     /* 这个函数做了一些游戏的初始渲染，然后调用 renderEntities 函数。记住，这个函数
@@ -119,8 +118,20 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
+        if(player!=null) player.render();
+        if(key!=null) key.render();
+        passHandler();
+    }
 
-        player.render();
+    function passHandler(){
+        if(key!=null&&key.x===player.x&&key.y-3===player.y){
+            if(timeCounter!=null){
+                key=null;
+                player=null;
+                clearInterval(timeCounter);
+            }
+            reset();
+        }
     }
 
     /* 这个函数现在没干任何事，但是这会是一个好地方让你来处理游戏重置的逻辑。可能是一个
@@ -128,7 +139,19 @@ var Engine = (function(global) {
      * 函数调用一次。
      */
     function reset() {
-        // 空操作
+        $("#timeCounter").text('0 Seconds');
+        swal({
+            title: 'Congradulations!',
+            html: `You finished the game in ${time} seconds!`,
+            type: "success",
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Retry'
+            }).then((result) => {
+            if (result.value) {
+                initAll();
+            }
+      });
     }
 
     /* 紧接着我们来加载我们知道的需要来绘制我们游戏关卡的图片。然后把 init 方法设置为回调函数。
@@ -139,7 +162,12 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/Key.png'
     ]);
     Resources.onReady(init);
 
