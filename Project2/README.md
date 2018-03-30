@@ -5,8 +5,16 @@
 </p>
 
 #游戏角色#
-![character](./images/char-boy.png)
 
+![character](./images/char-boy.png)
+![character](./images/char-cat-girl.png)
+![character](./images/char-horn-girl.png)
+![character](./images/char-pink-girl.png)
+![character](./images/char-princess-girl.png)
+
+#通关钥匙#
+
+![character](./images/key.png)
 
 #游戏规则#
 <p>
