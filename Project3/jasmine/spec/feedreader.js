@@ -94,7 +94,9 @@ $(function() {
          * 记住，loadFeed() 函数是异步的。
          */
         var defaultLoaded = $('.header-title').text();
+        
         beforeEach(function(done){
+            jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
             loadFeed(1,done);
         });
         
