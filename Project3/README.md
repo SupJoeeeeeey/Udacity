@@ -2,9 +2,6 @@
 
 在这个项目中，学会运用jasmine测试框架对网站进行自动化单元测试
 
-## 项目入口
-
-<a href="https://supjoeeeeeey.github.io/Udacity/Project3/index.html">Jasmine测试框架</a>
 
 ## 项目说明
 
