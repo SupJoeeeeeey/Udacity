@@ -27,6 +27,7 @@ var allFeeds = [
 function init() {
     // 加载我们定义的第一个源。
     loadFeed(0);
+    //loadFeed(1);
 }
 
 /* 这个函数用 Google Feed Reader API 加载 RSS 源。然后做一些
