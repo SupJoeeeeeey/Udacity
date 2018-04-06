@@ -91,26 +91,26 @@ var ViewModel = function(){
                 viewModel.currentMarker().setMap(null);
               map.setCenter(results[0].geometry.location);
               map.setZoom(15);
-              var marker = new google.maps.Marker({
-                position: results[0].geometry.location,
-                title: address,
-                map:map,
-                animation: google.maps.Animation.DROP,
-                icon: defaultIcon,
-                id: results[0].place_id
-              });
-              marker.addListener('click', function() {
-                populateInfoWindow(this, infowindow);
-              });
-              // Two event listeners - one for mouseover, one for mouseout,
-              // to change the colors back and forth.
-              marker.addListener('mouseover', function() {
-                this.setIcon(highlightedIcon);
-              });
-              marker.addListener('mouseout', function() {
-                this.setIcon(defaultIcon);
-              });
-              viewModel.currentMarker(marker);
+              if(viewModel.currentMarker()==null||viewModel.currentMarker().title!==address){
+                var marker = new google.maps.Marker({
+                  position: results[0].geometry.location,
+                  title: address,
+                  map:map,
+                  animation: google.maps.Animation.DROP,
+                  icon: defaultIcon,
+                  id: results[0].place_id
+                });
+  
+                // Two event listeners - one for mouseover, one for mouseout,
+                // to change the colors back and forth.
+                marker.addListener('mouseover', function() {
+                  this.setIcon(highlightedIcon);
+                });
+                marker.addListener('mouseout', function() {
+                  this.setIcon(defaultIcon);
+                });
+                viewModel.currentMarker(marker);
+              }
             } 
             else {
               window.alert('We could not find that location - try entering a more' +
