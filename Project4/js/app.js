@@ -82,19 +82,13 @@ var ViewModel = function(){
         // on it and zoom in
         var infowindow = new google.maps.InfoWindow();
 
-        // Style the markers a bit. This will be our listing marker icon.
-        var defaultIcon = makeMarkerIcon('0091ff');
-      
-        // Create a "highlighted location" marker color for when the user
-        // mouses over the marker.
-        var highlightedIcon = makeMarkerIcon('FFFF24');
-
         geocoder.geocode(
           { address: address,
             componentRestrictions: {locality: 'Los Angeles'}
           }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-              viewModel.currentMarker().setMap(null);
+              if(viewModel.currentMarker()!=null)
+                viewModel.currentMarker().setMap(null);
               map.setCenter(results[0].geometry.location);
               map.setZoom(15);
               var marker = new google.maps.Marker({
@@ -313,11 +307,11 @@ function initMap(){
   var largeInfowindow = new google.maps.InfoWindow();
 
   // Style the markers a bit. This will be our listing marker icon.
-  var defaultIcon = makeMarkerIcon('0091ff');
+  defaultIcon = makeMarkerIcon('0091ff');
 
   // Create a "highlighted location" marker color for when the user
   // mouses over the marker.
-  var highlightedIcon = makeMarkerIcon('FFFF24');
+  highlightedIcon = makeMarkerIcon('FFFF24');
 
   for (var i = 0; i < locations.length; i++) {
       // Get the position from the location array.
@@ -410,7 +404,9 @@ function initMap(){
       }
   }
 }
-
+  // Style the markers a bit. This will be our listing marker icon.
+  var defaultIcon, highlightedIcon;
+  
   // This function takes in a COLOR, and then creates a new marker
   // icon of that color. The icon will be 21 px wide by 34 high, have an origin
   // of 0, 0 and be anchored at 10, 34).
