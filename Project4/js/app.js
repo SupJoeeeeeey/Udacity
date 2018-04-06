@@ -133,14 +133,11 @@ var ViewModel = function(){
     var maxDuration = document.getElementById('duration').value;
     var origins = response.originAddresses;
     var destinations = response.destinationAddresses;
+    viewModel.locations([]);
     // Parse through the results, and get the distance and duration of each.
     // Because there might be  multiple origins and destinations we have a nested loop
     // Then, make sure at least 1 result was found.
     var atLeastOne = false;
-    var listing = document.getElementById('listing');
-    listing.innerHTML='';
-    var uoList = document.createElement('ul');
-    listing.appendChild(uoList);
     for (var i = 0; i < origins.length; i++) {
       var results = response.rows[i].elements;
       for (var j = 0; j < results.length; j++) {
@@ -172,15 +169,7 @@ var ViewModel = function(){
             google.maps.event.addListener(markers[i], 'click', function() {
               this.infowindow.close();
             });
-            var liElmnt = document.createElement('li');
-            var aLink = document.createElement('a');
-            aLink.href = '#';
-            aLink.onclick = function(){
-              viewModel.showMarker();
-            }
-            aLink.text=markers[i].title;
-            liElmnt.appendChild(aLink);
-            uoList.appendChild(liElmnt);
+            viewModel.locations.push(markers[i]);
           }
         }
       }
