@@ -15,9 +15,11 @@ var ViewModel = function(){
   this.toggle = ko.observable('Hide Options');
   this.toggleList = ko.observable('Show Listing');
   this.locations = ko.observableArray(locations);
+  this.currentMarker = ko.observable(null);
 
   this.showMarker = function(){
     viewModel.hideAllMarkers();
+    viewModel.currentMarker().setMap(null);
     var current = this;
     markers.forEach(function(marker){
       if(current.title == marker.title){
@@ -48,6 +50,7 @@ var ViewModel = function(){
       }
       else{
           this.toggleList('Show Listing');
+          viewModel.currentMarker().setMap(null);
       }
       markers.forEach(function(marker){
           if(flag){
@@ -77,6 +80,15 @@ var ViewModel = function(){
       else {
         // Geocode the address/area entered to get the center. Then, center the map
         // on it and zoom in
+        var infowindow = new google.maps.InfoWindow();
+
+        // Style the markers a bit. This will be our listing marker icon.
+        var defaultIcon = makeMarkerIcon('0091ff');
+      
+        // Create a "highlighted location" marker color for when the user
+        // mouses over the marker.
+        var highlightedIcon = makeMarkerIcon('FFFF24');
+
         geocoder.geocode(
           { address: address,
             componentRestrictions: {locality: 'Los Angeles'}
@@ -84,6 +96,26 @@ var ViewModel = function(){
             if (status == google.maps.GeocoderStatus.OK) {
               map.setCenter(results[0].geometry.location);
               map.setZoom(15);
+              var marker = new google.maps.Marker({
+                position: results[0].geometry.location,
+                title: address,
+                map:map,
+                animation: google.maps.Animation.DROP,
+                icon: defaultIcon,
+                id: results[0].place_id
+              });
+              marker.addListener('click', function() {
+                populateInfoWindow(this, infowindow);
+              });
+              // Two event listeners - one for mouseover, one for mouseout,
+              // to change the colors back and forth.
+              marker.addListener('mouseover', function() {
+                this.setIcon(highlightedIcon);
+              });
+              marker.addListener('mouseout', function() {
+                this.setIcon(defaultIcon);
+              });
+              viewModel.currentMarker(marker);
             } 
             else {
               window.alert('We could not find that location - try entering a more' +
@@ -215,6 +247,7 @@ var ViewModel = function(){
       markers.forEach(function(marker){
           marker.setMap(null);
       });
+      viewModel.currentMarker().setMap(null);
   }
 
   this.dragElement = function(){
@@ -313,20 +346,6 @@ function initMap(){
       });
     }
 
-    // This function takes in a COLOR, and then creates a new marker
-    // icon of that color. The icon will be 21 px wide by 34 high, have an origin
-    // of 0, 0 and be anchored at 10, 34).
-    function makeMarkerIcon(markerColor) {
-      var markerImage = new google.maps.MarkerImage(
-        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
-        '|40|_|%E2%80%A2',
-        new google.maps.Size(21, 34),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(10, 34),
-        new google.maps.Size(21,34));
-      return markerImage;
-    }
-
     //bounce marker
     function toggleBounce(marker) {
       setTimeout(function(){
@@ -391,9 +410,22 @@ function initMap(){
   }
 }
 
+  // This function takes in a COLOR, and then creates a new marker
+  // icon of that color. The icon will be 21 px wide by 34 high, have an origin
+  // of 0, 0 and be anchored at 10, 34).
+  function makeMarkerIcon(markerColor) {
+    var markerImage = new google.maps.MarkerImage(
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+      '|40|_|%E2%80%A2',
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(10, 34),
+      new google.maps.Size(21,34));
+    return markerImage;
+  }
+
 //bind view model to html
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
-
 //set optionsBox as draggable
 viewModel.dragElement();
