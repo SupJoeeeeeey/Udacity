@@ -8,14 +8,44 @@
 <body>
     <div id='container'>
         <div id='optionsBox' data-bind='style:{height:optionsHeight}'>
-            <div id='toggleBar' data-bind="click: toggleToHideAndShow">click to hide/show</div>
+            <div id='toggleBar' data-bind="click: toggleToHideAndShow"> <span data-bind='text:toggle'></span></div>
+            <input id="toggleList" type="button" value="Show Listings" data-bind='value:toggleList,click: toggleMarker'>
+            <hr>
+            <div id='zoomBox'>
+                    <input id="favoriteArea" type="text" placeholder="Search a spot!">
+                    <input id="zoom" type="button" value="Zoom" data-bind='click: zoom'>
+            </div>
+            <hr>
+            <div id='searchBox'>
+                    <span> Within </span>
+                    <select id="duration">
+                      <option value="10">10 min</option>
+                      <option value="15">15 min</option>
+                      <option value="30">30 min</option>
+                      <option value="60">1 hour</option>
+                    </select>
+                    <select id="mode">
+                      <option value="DRIVING">drive</option>
+                      <option value="WALKING">walk</option>
+                      <option value="BICYCLING">bike</option>
+                      <option value="TRANSIT">transit ride</option>
+                    </select>
+                    <span>from University of Souther California</span>
+                    <input id="search" type="button" value="Go" data-bind='click:search'>
+            </div>
+            <hr>
+            <div id='listing'>
+                <ul data-bind='foreach: locations'>
+                    <li><a href='#' data-bind='click:$parent.showMarker'><span data-bind='text:title'></a></li>
+                </ul>
+            </div>
         </div>
             <div id='map'>
-
+                <div id='pano'></div>
             </div>
     </div>
 <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js'></script>
 <script src="js/app.js"></script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA9R_wdDghXQ_3EfeDXgOrALXm8ca5Qp3o&v=3&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyA9R_wdDghXQ_3EfeDXgOrALXm8ca5Qp3o&v=3&callback=initMap"></script>
 </body>
 </html>
