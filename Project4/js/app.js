@@ -1,36 +1,52 @@
-//Model
-var locations = [
-    {title: 'Place 1', location: {lat:34.0205312,lng:-118.252142}},
-    {title: 'Place 2', location: {lat:34.011213,lng:-118.255631}},
-    {title: 'Place 3', location: {lat:34.030890,lng:-118.276631}},
-    {title: 'Place 4', location: {lat:34.0221,lng:-118.283631}},
-    {title: 'Place 5', location: {lat:34.011241,lng:-118.281214}},
-    {title: 'University of Southern California', location: {lat:34.0205111,lng:-118.285631}}
-  ];
-
 //ViewModel
 var ViewModel = function(){
   var self = this;
-  this.optionsHeight = ko.observable('400px');
+  this.optionsHeight = ko.observable('500px');
   this.toggle = ko.observable('Hide Options');
   this.toggleList = ko.observable('Show Listing');
   this.locations = ko.observableArray(locations);
   this.currentMarker = ko.observable(null);
+  this.weather = ko.observableArray([]);
+
+  this.temp_min = ko.observable(0);
+  this.temp_max = ko.observable(0);
+  this.temp = ko.observable(0);
+  this.humidity = ko.observable(0);
+
+  //fetch weather data from 3rd party API
+  this.updateTemp = function(){
+    fetch(`http://api.openweathermap.org/data/2.5/weather?q=Los%20Angeles,us&appid=7e7675f2474ec55221c482fde62dc590`)
+    .then((res)=>{
+      return res.json();
+    }).
+    then((response)=>{
+      self.weather([
+        `Min Temp: ${response.main.temp_min}`,
+        `Max Temp: ${response.main.temp_max}`,
+        `Current Temperature: ${response.main.temp}`,
+        `Humidity: ${response.main.humidity}`
+      ]);
+    }).
+    catch((e)=>{
+      alert(`Error: ${e.message}`);
+    });
+  }
 
   this.showMarker = function(){
     viewModel.hideAllMarkers();
-    viewModel.currentMarker().setMap(null);
     var current = this;
     markers.forEach(function(marker){
       if(current.title == marker.title){
-        marker.setMap(map);
+        marker.setVisible(true);
+        viewModel.populateInfoWindow(marker);
+        toggleBounce(marker);
       }
     });
   }
 
   this.toggleToHideAndShow = function(){
       var height
-      if(this.optionsHeight() == '400px'){
+      if(this.optionsHeight() == '500px'){
           this.optionsHeight('30px');
           this.toggle('Show Options');
       }
@@ -50,74 +66,39 @@ var ViewModel = function(){
       }
       else{
           this.toggleList('Show Listing');
-          viewModel.currentMarker().setMap(null);
+          if(viewModel.currentMarker()!=null)
+            viewModel.currentMarker().setVisible(false);
       }
       markers.forEach(function(marker){
           if(flag){
               marker.setAnimation(google.maps.Animation.DROP);
-              marker.setMap(map);
+              marker.setVisible(true);
               bounds.extend(marker.position);
           }
           else
-              marker.setMap(null);
+              marker.setVisible(false);
       });
       if(bounds)
           map.fitBounds(bounds);
   }
 
-  this.zoom = function(){
-      // This function takes the input value in the find nearby area text input
-      // locates it, and then zooms into that area. This is so that the user can
-      // show all listings, then decide to focus on one area of the map.
-      // Initialize the geocoder.
-      var geocoder = new google.maps.Geocoder();
-      // Get the address or place that the user entered.
-      var address = document.getElementById('favoriteArea').value;
-      // Make sure the address isn't blank.
-      if (address == '') {
-        window.alert('You must enter an area, or address.');
-      } 
-      else {
-        // Geocode the address/area entered to get the center. Then, center the map
-        // on it and zoom in
-        var infowindow = new google.maps.InfoWindow();
-
-        geocoder.geocode(
-          { address: address,
-            componentRestrictions: {locality: 'Los Angeles'}
-          }, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-              if(viewModel.currentMarker()!=null)
-                viewModel.currentMarker().setMap(null);
-              map.setCenter(results[0].geometry.location);
-              map.setZoom(15);
-              if(viewModel.currentMarker()==null||viewModel.currentMarker().title!==address){
-                var marker = new google.maps.Marker({
-                  position: results[0].geometry.location,
-                  title: address,
-                  map:map,
-                  animation: google.maps.Animation.DROP,
-                  icon: defaultIcon,
-                  id: results[0].place_id
-                });
-  
-                // Two event listeners - one for mouseover, one for mouseout,
-                // to change the colors back and forth.
-                marker.addListener('mouseover', function() {
-                  this.setIcon(highlightedIcon);
-                });
-                marker.addListener('mouseout', function() {
-                  this.setIcon(defaultIcon);
-                });
-                viewModel.currentMarker(marker);
-              }
-            } 
-            else {
-              window.alert('We could not find that location - try entering a more' +
-                  ' specific place.');
-            }
-        });
-      }
+  this.filterList = function(){
+    var str = document.getElementById('favoriteArea').value;
+    if(str.length>0){
+          this.locations(locations.filter( (location) => location.title.substr(0,str.length).toLowerCase() == str.toLowerCase()));
+          markers.forEach((marker)=>{
+            if(marker.title.substr(0,str.length).toLowerCase() == str.toLowerCase())
+              marker.setVisible(true);
+            else
+              marker.setVisible(false);
+          });
+    }
+    else{
+      this.locations(locations);
+      markers.forEach((marker)=>{
+          marker.setVisible(true);
+      });
+    }
   }
 
   // This function allows the user to input a desired travel time, in
@@ -238,11 +219,68 @@ var ViewModel = function(){
     });
   }
 
+  // This function populates the infowindow when the marker is clicked. We'll only allow
+  // one infowindow which will open at the marker that is clicked, and populate based
+  // on that markers position.
+  this.populateInfoWindow = function (marker) {
+    // var infowindow = new google.maps.InfoWindow();
+
+    //bounce marker
+    if(marker.getAnimation()===null){
+        setTimeout(function(){
+            marker.setAnimation(null);
+        },1500);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+
+    // Check to make sure the infowindow is not already opened on this marker.
+    if (currentWindow.marker != marker) {
+      // Clear the infowindow content to give the streetview time to load.
+      currentWindow.setContent('');
+      currentWindow.marker = marker;
+      // Make sure the marker property is cleared if the infowindow is closed.
+      currentWindow.addListener('closeclick', function() {
+        currentWindow.marker = null;
+      });
+      var streetViewService = new google.maps.StreetViewService();
+      var radius = 50;
+      // In case the status is OK, which means the pano was found, compute the
+      // position of the streetview image, then calculate the heading, then get a
+      // panorama from that and set the options
+      function getStreetView(data, status) {
+        if (status == google.maps.StreetViewStatus.OK) {
+          var nearStreetViewLocation = data.location.latLng;
+          var heading = google.maps.geometry.spherical.computeHeading(
+            nearStreetViewLocation, marker.position);
+            currentWindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+            var panoramaOptions = {
+              position: nearStreetViewLocation,
+              pov: {
+                heading: heading,
+                pitch: 30
+              }
+            };
+          var panorama = new google.maps.StreetViewPanorama(
+            document.getElementById('pano'), panoramaOptions);
+        } else {
+          currentWindow.setContent('<div>' + marker.title + '</div>' +
+            '<div>No Street View Found</div>');
+        }
+      }
+        // Use streetview service to get the closest streetview image within
+        // 50 meters of the markers position
+        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
+        // Open the infowindow on the correct marker.
+        currentWindow.open(map, marker);
+      }
+    }
+
   this.hideAllMarkers = function (){
       markers.forEach(function(marker){
-          marker.setMap(null);
+          marker.setVisible(false);
       });
-      viewModel.currentMarker().setMap(null);
+      if(viewModel.currentMarker()!=null)
+        viewModel.currentMarker().setVisible(false);
   }
 
   this.dragElement = function(){
@@ -298,13 +336,7 @@ function initMap(){
       zoom: 13
   });
 
-  //add autocomplete function to favoriteArea
-  var zoomAutocomplete = new google.maps.places.Autocomplete(
-    document.getElementById('favoriteArea'));
-  // Bias the boundaries within the map for the zoom to area text.
-  zoomAutocomplete.bindTo('bounds', map);
-
-  var largeInfowindow = new google.maps.InfoWindow();
+  // var largeInfowindow = new google.maps.InfoWindow();
 
   // Style the markers a bit. This will be our listing marker icon.
   defaultIcon = makeMarkerIcon('0091ff');
@@ -313,6 +345,10 @@ function initMap(){
   // mouses over the marker.
   highlightedIcon = makeMarkerIcon('FFFF24');
 
+  currentWindow = new google.maps.InfoWindow();
+
+  bounds = new google.maps.LatLngBounds();
+
   for (var i = 0; i < locations.length; i++) {
       // Get the position from the location array.
       var position = locations[i].location;
@@ -320,16 +356,20 @@ function initMap(){
       // Create a marker per location, and put into markers array.
       var marker = new google.maps.Marker({
         position: position,
+        map:map,
         title: title,
         animation: google.maps.Animation.DROP,
         icon: defaultIcon,
-        id: i
+        id: i,
+        visible:true
       });
       // Push the marker to our array of markers.
       markers.push(marker);
+
+      bounds.extend(marker.position);
       // Create an onclick event to open the large infowindow at each marker.
       marker.addListener('click', function() {
-        populateInfoWindow(this, largeInfowindow);
+        viewModel.populateInfoWindow(this);
       });
       // Two event listeners - one for mouseover, one for mouseout,
       // to change the colors back and forth.
@@ -340,72 +380,10 @@ function initMap(){
         this.setIcon(defaultIcon);
       });
     }
-
-    //bounce marker
-    function toggleBounce(marker) {
-      setTimeout(function(){
-          marker.setAnimation(null);
-      },1000);
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-
-    // This function populates the infowindow when the marker is clicked. We'll only allow
-    // one infowindow which will open at the marker that is clicked, and populate based
-    // on that markers position.
-    function populateInfoWindow(marker, infowindow) {
-      
-      //bounce marker
-      if(marker.getAnimation()===null){
-          setTimeout(function(){
-              marker.setAnimation(null);
-          },1500);
-          marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
-
-      // Check to make sure the infowindow is not already opened on this marker.
-      if (infowindow.marker != marker) {
-        // Clear the infowindow content to give the streetview time to load.
-        infowindow.setContent('');
-        infowindow.marker = marker;
-        // Make sure the marker property is cleared if the infowindow is closed.
-        infowindow.addListener('closeclick', function() {
-          infowindow.marker = null;
-        });
-        var streetViewService = new google.maps.StreetViewService();
-        var radius = 50;
-        // In case the status is OK, which means the pano was found, compute the
-        // position of the streetview image, then calculate the heading, then get a
-        // panorama from that and set the options
-        function getStreetView(data, status) {
-          if (status == google.maps.StreetViewStatus.OK) {
-            var nearStreetViewLocation = data.location.latLng;
-            var heading = google.maps.geometry.spherical.computeHeading(
-              nearStreetViewLocation, marker.position);
-              infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
-              var panoramaOptions = {
-                position: nearStreetViewLocation,
-                pov: {
-                  heading: heading,
-                  pitch: 30
-                }
-              };
-            var panorama = new google.maps.StreetViewPanorama(
-              document.getElementById('pano'), panoramaOptions);
-          } else {
-            infowindow.setContent('<div>' + marker.title + '</div>' +
-              '<div>No Street View Found</div>');
-          }
-        }
-        // Use streetview service to get the closest streetview image within
-        // 50 meters of the markers position
-        streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
-        // Open the infowindow on the correct marker.
-        infowindow.open(map, marker);
-      }
-  }
+    map.fitBounds(bounds);
 }
   // Style the markers a bit. This will be our listing marker icon.
-  var defaultIcon, highlightedIcon;
+  var defaultIcon, highlightedIcon, currentWindow;
   
   // This function takes in a COLOR, and then creates a new marker
   // icon of that color. The icon will be 21 px wide by 34 high, have an origin
@@ -421,8 +399,19 @@ function initMap(){
     return markerImage;
   }
 
+  
+  //bounce marker
+  function toggleBounce(marker) {
+    setTimeout(function(){
+        marker.setAnimation(null);
+    },1000);
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+  }
+
 //bind view model to html
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
 //set optionsBox as draggable
 viewModel.dragElement();
+viewModel.updateTemp();
+window.setInterval(viewModel.updateTemp,600*1000);

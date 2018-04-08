@@ -1,34 +1,34 @@
 html,
 body,
-#container{
+#container {
   font-family: Arial, sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-hr{
+hr {
     background: #D0D7D9;
     height: 1px;
-    margin: 10px 0 10px 0;
+    margin: 10px 0;
     border: none;
 }
 
-input{
-    margin:10px 0 10px 0;
+input {
+    margin:10px 0;
 }
-ul{
+ul {
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
     -webkit-padding-start: 0;
 }
-li{
+li {
     list-style: none;
     margin:5px 0 5px 0;
 }
 
-#optionsBox{
-    height: 400px;
+#optionsBox {
+    height: 500px;
     width: 250px;;
     text-align:center;
     position:absolute;
@@ -41,10 +41,10 @@ li{
 }
 #toggleList,
 #zoom,
-#search{
+#search {
     font-size:20px;
 }
-#toggleBar{
+#toggleBar {
     width:inherit;
     height:30px;
     background-color:greenyellow;
@@ -58,22 +58,25 @@ li{
   display:block;
   margin:10px auto;
 }
-
+#zoomBox {
+    width:inherit;
+    height: 35%;
+}
 #favoriteArea,
 #searchText {
     width:75%;
 }
 
 #duration,
-#mode{
+#mode {
     width:35%;
 }
 
-#searchBox{
+#searchBox {
     font-size:15px;
 }
 
-#map{
+#map {
     height:100%;
 }
 
