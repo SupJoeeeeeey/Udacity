@@ -15,7 +15,7 @@ var ViewModel = function(){
 
   //fetch weather data from 3rd party API
   this.updateTemp = function(){
-    fetch(`http://api.openweathermap.org/data/2.5/weather?q=Los%20Angeles,us&appid=7e7675f2474ec55221c482fde62dc590`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=Los%20Angeles,us&appid=7e7675f2474ec55221c482fde62dc590`)
     .then((res)=>{
       return res.json();
     }).
